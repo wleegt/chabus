@@ -1,0 +1,25 @@
+<section>
+  <div class="page-header">
+    <h1>Estimatenews</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="estimatenew in vm.estimatenews"
+       ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="estimatenew.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="estimatenew.user" ng-bind="estimatenew.user.displayName"></span>
+        <span ng-if="!estimatenew.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="estimatenew.startposition"></h4>
+      <p class="list-group-item-text" ng-bind="estimatenew.endposition"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.kindofest"></p>      
+      <p class="list-group-item-text" ng-bind="estimatenew.message"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.estimatenews.$resolved && !vm.estimatenews.length">
+    No Estimatenews yet, why don't you <a ui-sref="estimatenews.create">create one</a>?
+  </div>
+</section>

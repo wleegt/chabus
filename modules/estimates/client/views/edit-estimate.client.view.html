@@ -1,0 +1,39 @@
+<section ng-controller="EstimatesController" ng-init="findOne()">
+  <div class="page-header">
+    <h1>Edit Estimate</h1>
+  </div>
+  <div class="col-md-12">
+    <form name="estimateForm" class="form-horizontal" ng-submit="update(estimateForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label for="startposition">출발지</label>
+          <input name="startposition" type="text" ng-model="estimate.startposition" id="startposition" class="form-control" placeholder="출발장소를 입력하세요" required>
+          <div ng-messages="estimateForm.startposition.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Estimate startposition is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="endposition">도착지</label>
+          <input name="endposition" type="text" ng-model="estimate.endposition" id="endposition" class="form-control" placeholder="도착장소를 입력하세요" required>
+          <div ng-messages="estimateForm.endposition.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Estimate endposition is required.</p>
+          </div>
+        </div>
+        <div class="form-group btn-group">
+          <label class="btn btn-primary" ng-model="estimate.isturnback" btn-radio="true">왕복</label>
+          <label class="btn btn-primary" ng-model="estimate.isturnback" btn-radio="false">편도</label>
+        </div>
+        <div class="form-group">
+          <label for="message">남김말(선택)</label>
+          <textarea name="message" ng-model="estimate.message" id="message" class="form-control" cols="30" rows="10" placeholder="추가 요청사항을 입력하세요"></textarea>
+        </div>
+        <div class="form-group">
+          <input type="submit" value="Update" class="btn btn-default">
+        </div>
+        <div ng-show="error" class="text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>

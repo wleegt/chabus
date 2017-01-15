@@ -1,0 +1,29 @@
+<section>
+  <div class="page-header">
+    <h1 ng-bind="vm.estimatenew.name"></h1>
+  </div>
+  <div class="pull-right"
+       ng-show="vm.estimatenew.isCurrentUserOwner"> <!-- server.controller 에 exports.read 함수에 isCurrentUserOwner 값이 있음.-->
+    <a class="btn btn-primary"
+       ui-sref="estimatenews.edit({ estimatenewId: vm.estimatenew._id })">
+      <i class="glyphicon glyphicon-edit"></i>
+    </a>
+    <a class="btn btn-primary" ng-click="vm.remove()">
+      <i class="glyphicon glyphicon-trash"></i>
+    </a>
+  </div>
+  <small>
+    <em class="text-muted">
+      Posted on
+      <span ng-bind="vm.estimatenew.created | date:'mediumDate'"></span>
+      by
+      <span ng-if="vm.estimatenew.user"
+            ng-bind="vm.estimatenew.user.displayName"></span>
+      <span ng-if="!vm.estimatenew.user">Deleted User</span>
+    </em>
+  </small>
+  <p class="lead" ng-bind="vm.estimatenew.startposition"></p>
+  <p class="lead" ng-bind="vm.estimatenew.endposition"></p>
+  <p class="lead" ng-bind="vm.estimatenew.message"></p>
+
+</section>

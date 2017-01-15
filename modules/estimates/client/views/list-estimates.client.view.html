@@ -1,0 +1,24 @@
+<section ng-controller="EstimatesController" ng-init="find()">
+  <div class="page-header">
+    <h1>Estimates</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="estimate in estimates" ui-sref="estimates.view({estimateId: estimate._id})" class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="estimate.created | date:'mediumDate'"></span>
+        by
+        <span ng-bind="estimate.user.displayName"></span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="estimate.startposition"></h4>
+      <p class="list-group-item-text" ng-bind="estimate.endposition"></p>
+      <p class="list-group-item-text" ng-bind="estimate.isturnback"></p>
+      <p class="list-group-item-text" ng-bind="estimate.startdatetime"></p>
+      <p class="list-group-item-text" ng-bind="estimate.enddatetime"></p>
+      <p class="list-group-item-text" ng-bind="estimate.message"></p>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="estimates.$resolved && !estimates.length">
+    No estimates yet, why don't you <a ui-sref="estimates.create">create one</a>?
+  </div>
+</section>

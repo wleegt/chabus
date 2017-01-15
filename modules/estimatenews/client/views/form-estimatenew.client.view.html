@@ -1,0 +1,56 @@
+<section>
+  <div class="page-header">
+    <h1>{{vm.estimatenew._id ? 'Edit Estimatenew' : 'New Estimatenew'}}</h1>
+  </div>
+  <!-- <div class="col-md-12"> -->
+  <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+    <form name="vm.form.estimatenewForm" class="form-horizontal" ng-submit="vm.save(vm.form.estimatenewForm.$valid)" novalidate>
+      <fieldset>
+        <!-- <div class="form-group" show-errors>
+          <label class="control-label" for="name">Name</label>
+          <input name="name" type="text" ng-model="vm.estimatenew.name" id="name" class="form-control" placeholder="Name" required>
+          <div ng-messages="vm.form.estimatenewForm.name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Estimatenew name is required.</p>
+          </div>
+        </div> -->
+        <div class="form-group" show-errors>
+          <label for="startposition">출발지</label>
+          <input name="startposition" type="text" ng-model="vm.estimatenew.startposition" id="startposition" class="form-control" placeholder="출발 장소를 입력하세요" required>
+          <div ng-messages="vm.form.estimatenewForm.startposition.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="endposition">도착지</label>
+          <input name="endposition" type="text" ng-model="vm.estimatenew.endposition" id="endposition" class="form-control" placeholder="도착 장소를 입력하세요" required>
+          <div ng-messages="vm.form.estimatenewForm.endposition.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="kindofest">견적종류(일반: true)</label>
+          <input name="kindofest" type="text" ng-model="vm.estimatenew.kindofest" id="kindofest" class="form-control" placeholder="도착 장소를 입력하세요" >
+          <div ng-messages="vm.form.estimatenewForm.kindofest.$error" role="alert">
+            <p class="help-block error-text" >필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="message">남김말
+            <span class="text-muted">(선택 입력사항)</span>
+          </label>
+          <textarea name="message" ng-model="vm.estimatenew.message" id="message" class="form-control" cols="30" rows="3" placeholder="경유지나 추가 요청사항을 입력하세요"></textarea>
+        </div>
+        <hr />
+
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.estimatenew._id ? 'Update' : 'Create'}}</button>
+          <br /><small>* 다음 단계로 진행하시면 홈버스 <a>이용약관</a> 및 <a>개인정보 취급방침</a>에 동의하시는 것으로 간주됩니다.</small>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+
+      </fieldset>
+    </form>
+  </div>
+</section>
