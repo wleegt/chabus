@@ -2,24 +2,28 @@
   <div class="page-header">
     <h1>{{vm.estimatenew._id ? 'Edit Estimatenew' : 'New Estimatenew'}}</h1>
   </div>
-  <!-- <div class="col-md-12"> -->
   <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
     <form name="vm.form.estimatenewForm" class="form-horizontal" ng-submit="vm.save(vm.form.estimatenewForm.$valid)" novalidate>
       <fieldset>
-        <!-- <div class="form-group" show-errors>
-          <label class="control-label" for="name">Name</label>
-          <input name="name" type="text" ng-model="vm.estimatenew.name" id="name" class="form-control" placeholder="Name" required>
-          <div ng-messages="vm.form.estimatenewForm.name.$error" role="alert">
-            <p class="help-block error-text" ng-message="required">Estimatenew name is required.</p>
+        <div class="form-group" show-errors>
+          <label for="kindofest">견적종류(true: 일반, false: 통근)</label>
+          <input name="kindofest" type="text" ng-model="vm.estimatenew.kindofest" id="kindofest" class="form-control" placeholder="견적 종류(true: 일반, false: 통근)" >
+          <div ng-messages="vm.form.estimatenewForm.kindofest.$error" role="alert">
+            <p class="help-block error-text" >필수 입력항목</p>
           </div>
-        </div> -->
+        </div>
         <div class="form-group" show-errors>
           <label for="startposition">출발지</label>
           <input name="startposition" type="text" ng-model="vm.estimatenew.startposition" id="startposition" class="form-control" placeholder="출발 장소를 입력하세요" required>
           <div ng-messages="vm.form.estimatenewForm.startposition.$error" role="alert">
             <p class="help-block error-text" ng-message="required">필수 입력항목</p>
           </div>
+          <br />
+          <div>
+            <ng-map center="[40.74, -74.18]"></ng-map>
+          </div>
         </div>
+
         <div class="form-group" show-errors>
           <label for="endposition">도착지</label>
           <input name="endposition" type="text" ng-model="vm.estimatenew.endposition" id="endposition" class="form-control" placeholder="도착 장소를 입력하세요" required>
@@ -27,13 +31,137 @@
             <p class="help-block error-text" ng-message="required">필수 입력항목</p>
           </div>
         </div>
-        <div class="form-group" show-errors>
-          <label for="kindofest">견적종류(일반: true)</label>
-          <input name="kindofest" type="text" ng-model="vm.estimatenew.kindofest" id="kindofest" class="form-control" placeholder="도착 장소를 입력하세요" >
-          <div ng-messages="vm.form.estimatenewForm.kindofest.$error" role="alert">
-            <p class="help-block error-text" >필수 입력항목</p>
+        <div class="form-group">
+          <div class="btn-group btn-group-justified">
+            <label class="btn btn-default" ng-model="vm.estimatenew.isturnback" btn-radio="'왕복'">왕복</label>
+            <label class="btn btn-default" ng-model="vm.estimatenew.isturnback" btn-radio="'편도'">편도</label>
           </div>
         </div>
+        <hr />
+
+        <div class="row">
+          <label>여행 출발일정</label>
+        </div>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="form-group" show-errors>
+              <div class="input-group">
+                <input name="startdate" type="text" class="form-control" datepicker-popup="fullDate" ng-model="vm.estimatenew.startdate" is-open="opened1" min-date="minDate1" max-date="'2020-12-31'" datepicker-options="dateOptions" ng-required="true" close-text="닫기" clear-text="초기화" current-text="오늘" placeholder="가시는 날짜를 선택해주세요" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+              <div ng-messages="vm.form.estimatenewForm.startdate.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-5 col-sm-offset-1">
+            <div class="form-group" show-errors>
+              <select name="starttime" class="form-control" ng-model="vm.estimatenew.starttime" ng-options="h for h in hours" required>
+                <option value="" disabled selected>탑승 시간을 선택하세요</option>
+              </select>
+              <div ng-messages="vm.form.estimatenewForm.starttime.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row" ng-if="vm.estimatenew.isturnback==='왕복'">
+          <label>여행 복귀일정</label>
+        </div>
+        <div class="row" ng-if="vm.estimatenew.isturnback==='왕복'">
+          <div class="col-sm-6">
+            <div class="form-group" show-errors>
+              <div class="input-group">
+                <input name="enddate" type="text" class="form-control" datepicker-popup="fullDate" ng-model="vm.estimatenew.enddate" is-open="opened2" min-date="vm.estimatenew.startdate || minDate1" max-date="'2020-12-31'" datepicker-options="dateOptions" ng-required="true" close-text="닫기" clear-text="초기화" current-text="오늘" placeholder="오시는 날짜를 선택해주세요" />
+                <span class="input-group-btn">
+                  <button type="button" class="btn btn-default" ng-click="open2()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+              </div>
+              <div ng-messages="vm.form.estimatenewForm.enddate.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-5 col-sm-offset-1">
+            <div class="form-group" show-errors>
+              <select name="endtime" class="form-control" ng-model="vm.estimatenew.endtime" ng-options="h for h in hours" required>
+                <option value="" disabled selected>탑승 시간을 선택하세요</option>
+              </select>
+              <div ng-messages="vm.form.estimatenewForm.endtime.$error" role="alert">
+                <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label for="howmany">탑승인원</label>
+          <input name="howmany" type="text" ng-model="vm.estimatenew.howmany" id="howmany" class="form-control" placeholder="탑승하실 인원을 입력해주세요" required>
+          <div ng-messages="vm.form.estimatenewForm.howmany.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="purpose">사용목적</label>
+          <select name="purpose" class="form-control" ng-model="vm.estimatenew.purpose" ng-options="t for t in tripGoals" required>
+            <option value="" disabled selected="">어떤 목적으로 버스를 구하시나요?</option>
+          </select>
+          <div ng-messages="vm.form.estimatenewForm.purpose.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="phone">연락처 <span class="text-danger">* 예약된 기사님께만 공개합니다</span></label>
+          <p class="input-group">
+            <input name="phone" type="text" ng-model="vm.estimatenew.phone" id="phone" class="form-control" placeholder="연락 받으실 휴대전화번호를 입력해주세요" required>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-default">인증번호 요청</button>
+            </span>
+          </p>
+          <div ng-messages="vm.form.estimatenewForm.phone.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <hr />
+
+        <!-- optional input -->
+
+        <div class="form-group">
+          <label>결제 요구사항 <span class="text-muted">(선택 입력사항)</span></label>
+          <ul class="list-group">
+            <li class="list-group-item">
+              <span class="text-muted">세금계산서 및 현금영수증 발행</span>
+              <input name="taxinvoice" class="pull-right" type="checkbox" ng-model="vm.estimatenew.taxinvoice">
+            </li>
+            <li class="list-group-item">
+              <span class="text-muted">신용카드 결제</span>
+              <input name="creditcard" class="pull-right" type="checkbox" ng-model="vm.estimatenew.creditcard">
+            </li>
+          </ul>
+        </div>
+        <div class="form-group has-feedback">
+          <label>확정 예약가격
+            <span class="text-muted">(선택 입력사항)</span>
+            <a tooltip="'이 가격에 맞춰주시면 무조건 갑니다' 라고 기사님께 먼저 제안하는 기능으로, 이 가격에 맞춘 기사님과 예약이 자동으로 확정됩니다. 확정 예약가는 설정 후에도 언제든지 변경 가능합니다."><i class="glyphicon glyphicon-question-sign"></i></a>
+          </label>
+          <input name="quickprice" type="number" min="0" ng-model="vm.estimatenew.quickprice" id="quickprice" class="form-control" placeholder="확정 예약가격을 입력해주세요.">
+          <span class="form-control-feedback"> 만원</span>
+        </div>
+        <div class="form-group">
+          <label>선호하는 버스 선택
+            <span class="text-muted">(선택 입력사항)</span>
+          </label>
+          <div class="btn-group btn-group-justified">
+            <label class="btn btn-default" ng-model="vm.estimatenew.preferedbus" btn-radio="'상관없음'">상관없음</label>
+            <label class="btn btn-default" ng-model="vm.estimatenew.preferedbus" btn-radio="'미니버스'">미니버스<br /><small>25인승</small></label>
+            <label class="btn btn-default" ng-model="vm.estimatenew.preferedbus" btn-radio="'일반버스'">일반버스<br /><small>45인승</small></label>
+            <label class="btn btn-default" ng-model="vm.estimatenew.preferedbus" btn-radio="'우등버스'">우등버스<br /><small>28인승</small></label>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="message">남김말
             <span class="text-muted">(선택 입력사항)</span>

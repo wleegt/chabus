@@ -10,87 +10,92 @@ var mongoose = require('mongoose'),
  * Estimatenew Schema
  */
 var EstimatenewSchema = new Schema({
-  // name: {
-  //   type: String,
-  //   default: '',
-  //   required: 'Please fill Estimatenew name',
-  //   trim: true
-  // },
+  kindofest: {
+    type: Boolean, // 일반견적 true, 통근견적 false
+    default: true
+  },
   startposition: {
     type: String,
     default: '',
-    required: true,
+    required: 'Please fill Estimatenew startposition',
     trim: true
   },
   endposition: {
     type: String,
     default: '',
-    required: true,
+    required: 'Please fill Estimatenew endposition',
     trim: true
   },
-  // isturnback: {
-  //   type: Boolean,
-  //   default: true
-  // },
-  //  startdatetime: {
-  //   type: String,
-  //   default: '',
-  //   required: true,
-  //   trim: true
-  // },
-  // enddatetime: {
-  //   type: String,
-  //   default: '',
-  //   required: true,
-  //   trim: true
-  // },
-  // howmany: {
-  //   type: Number,
-  //   default: null,
-  //   required: true
-  // },
-  // purpose: {
-  //   type: String,
-  //   default: '',
-  //   required: true,
-  //   trim: true
-  // },
-  // phone: {
-  //   type: String,
-  //   default: '',
-  //   required: true,
-  //   trim: true
-  // },
-  //
-  // taxinvoice: {
-  //   type: Boolean,
-  //   default: false
-  // },
-  // creditcard: {
-  //   type: Boolean,
-  //   default: false
-  // },
-  // quickprice: {
-  //   type: Number,
-  //   default: null
-  // },
-  // preferedbus: {
-  //   type: String,
-  //   default: '',
-  //   trim: true
-  // },
+  isturnback: {
+    type: String,
+    default: '왕복',
+    trim: true
+  },
+  startdate: {
+    type: Date,
+    default: null,
+    required: 'Please select Estimatenew startdate'
+  },
+  starttime: {
+    type: String,
+    default: '',
+    required: 'Please select Estimatenew starttime',
+    trim: true
+  },
+  enddate: {
+    type: Date,
+    default: null
+  },
+  endtime: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  howmany: {
+    type: String,
+    default: '',
+    required: 'Please fill Estimatenew howmany',
+    trim: true
+  },
+  purpose: {
+    type: String,
+    default: '',
+    required: 'Please select Estimatenew purpose',
+    trim: true
+  },
+  phone: {
+    type: String,
+    default: '',
+    required: 'Please fill Estimatenew phone',
+    trim: true
+  },
+
+  taxinvoice: {
+    type: Boolean,
+    default: false
+  },
+  creditcard: {
+    type: Boolean,
+    default: false
+  },
+  quickprice: {
+    type: Number,
+    default: null
+  },
+  preferedbus: {
+    type: String,
+    default: '',
+    trim: true
+  },
   message: {
     type: String,
     default: '',
     trim: true
   },
+  
   created: {
     type: Date,
     default: Date.now
-  },
-  kindofest: {
-    type: Boolean, // 통근 false, 일반  true
-    default: true
   },
   user: {
     type: Schema.ObjectId,

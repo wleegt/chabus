@@ -22,8 +22,19 @@
       <span ng-if="!vm.estimatenew.user">Deleted User</span>
     </em>
   </small>
+  <p class="lead" ng-bind="vm.estimatenew.kindofest"></p>
   <p class="lead" ng-bind="vm.estimatenew.startposition"></p>
   <p class="lead" ng-bind="vm.estimatenew.endposition"></p>
+  <p class="lead" ng-bind="vm.estimatenew.isturnback"></p>
+  <p class="lead">{{vm.estimatenew.startdate | date:'fullDate'}} {{vm.estimatenew.starttime}}</p>
+  <p class="lead">{{vm.estimatenew.enddate | date:'fullDate'}} {{vm.estimatenew.endtime}}</p>
+  <p class="lead" ng-bind="vm.estimatenew.howmany"></p>
+  <p class="lead" ng-bind="vm.estimatenew.purpose"></p>
+  <p class="lead" ng-bind="vm.estimatenew.phone"></p>
+  <p class="lead" ng-bind="vm.estimatenew.taxinvoice"></p>
+  <p class="lead" ng-bind="vm.estimatenew.creditcard"></p>
+  <p class="lead" ng-bind="vm.estimatenew.quickprice"></p>
+  <p class="lead" ng-bind="vm.estimatenew.preferedbus"></p>
   <p class="lead" ng-bind="vm.estimatenew.message"></p>
 
 </section>

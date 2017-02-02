@@ -17,6 +17,8 @@ module.exports = {
         'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
         'public/lib/angular-file-upload/angular-file-upload.js',
         'public/lib/angular-i18n/angular-locale_ko-kr.js',
+        'http://maps.google.com/maps/api/js?key=AIzaSyCqm04M0tmQyf70_oE4djID-39xOSHzlz4',
+        'public/lib/ngmap/build/scripts/ng-map.min.js',
         'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
         'public/lib/underscore/underscore-min.js'
       ],

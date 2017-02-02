@@ -3,8 +3,7 @@
     <h1>Estimatenews</h1>
   </div>
   <div class="list-group">
-    <a ng-repeat="estimatenew in vm.estimatenews"
-       ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })"
+    <div ng-repeat="estimatenew in vm.estimatenews"
        class="list-group-item">
       <small class="list-group-item-text">
         Posted on
@@ -13,11 +12,24 @@
         <span ng-if="estimatenew.user" ng-bind="estimatenew.user.displayName"></span>
         <span ng-if="!estimatenew.user">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" ng-bind="estimatenew.startposition"></h4>
+      <h4 class="list-group-item-heading" ng-bind="estimatenew.kindofest"></h4>
+      <p class="list-group-item-text" ng-bind="estimatenew.startposition"></p>
       <p class="list-group-item-text" ng-bind="estimatenew.endposition"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.kindofest"></p>      
+      <p class="list-group-item-text" ng-bind="estimatenew.isturnback"></p>
+      <p class="list-group-item-text">{{estimatenew.startdate | date:'fullDate'}} {{estimatenew.starttime}}</p>
+      <p class="list-group-item-text">{{estimatenew.enddate | date:'fullDate'}} {{estimatenew.endtime}}</p>
+      <p class="list-group-item-text" ng-bind="estimatenew.howmany"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.purpose"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.phone"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.taxinvoice"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.creditcard"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.quickprice"></p>
+      <p class="list-group-item-text" ng-bind="estimatenew.preferedbus"></p>
       <p class="list-group-item-text" ng-bind="estimatenew.message"></p>
-    </a>
+      <!-- <a class="btn btn-default" ng-click="vm.biddingclick(estimatenew._id)">입찰하기</a> -->
+      <a class="btn btn-default" ui-sref="estimatenews.createbidding({ estimatenewId: estimatenew._id })">입찰하기</a>
+      <a class="btn btn-default" ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })">상세보기</a>
+    </div>
   </div>
   <div class="alert alert-warning text-center" ng-if="vm.estimatenews.$resolved && !vm.estimatenews.length">
     No Estimatenews yet, why don't you <a ui-sref="estimatenews.create">create one</a>?

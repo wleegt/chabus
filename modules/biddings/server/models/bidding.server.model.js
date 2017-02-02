@@ -10,10 +10,10 @@ var mongoose = require('mongoose'),
  * Bidding Schema
  */
 var BiddingSchema = new Schema({
-  name: {
+  biddingprice: {
     type: String,
     default: '',
-    required: 'Please fill Bidding name',
+    required: 'Please fill Bidding biddingprice',
     trim: true
   },
   created: {
@@ -23,6 +23,10 @@ var BiddingSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
+  },
+  estimatenewId: {
+    type: Schema.ObjectId,
+    ref: 'Estimatenew'
   }
 });
 

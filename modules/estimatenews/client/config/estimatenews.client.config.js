@@ -18,15 +18,22 @@
 
     // Add the dropdown list item
     menuService.addSubMenuItem('topbar', 'estimatenews', {
-      title: 'List Estimatenews',
+      title: '견적 리스트',
       state: 'estimatenews.list'
     });
 
     // Add the dropdown create item
     menuService.addSubMenuItem('topbar', 'estimatenews', {
-      title: 'Create Estimatenew',
+      title: '견적 신청',
       state: 'estimatenews.create',
       roles: ['user']
+    });
+
+    // Add the dropdown 입찰하기 item
+    menuService.addSubMenuItem('topbar', 'estimatenews', {
+      title: '입찰하기',
+      state: 'estimatenews.createbidding',
+      roles: ['driver', 'admin']
     });
   }
 }());

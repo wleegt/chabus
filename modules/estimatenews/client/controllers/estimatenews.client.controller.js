@@ -6,18 +6,20 @@
     .module('estimatenews')
     .controller('EstimatenewsController', EstimatenewsController);
 
-  EstimatenewsController.$inject = ['$scope', '$state', '$window', 'Authentication', 'estimatenewResolve'];
+  EstimatenewsController.$inject = ['$scope', '$state', '$window',  '$filter', 'Authentication', 'estimatenewResolve'];
 
-  function EstimatenewsController ($scope, $state, $window, Authentication, estimatenew) {
+  function EstimatenewsController ($scope, $state, $window, $filter, Authentication, estimatenew) {
     var vm = this;
-    vm.user=Authentication.user;
-
+    vm.user = Authentication.user; ///
     vm.authentication = Authentication;
     vm.estimatenew = estimatenew;
     vm.error = null;
     vm.form = {};
     vm.remove = remove;
     vm.save = save;
+
+    vm.estimatenew.isturnback = vm.estimatenew.isturnback || '왕복'; ///
+    vm.estimatenew.preferedbus = vm.estimatenew.preferedbus || '상관없음'; ///
 
     // Remove existing Estimatenew
     function remove() {
@@ -28,6 +30,12 @@
 
     // Save Estimatenew
     function save(isValid) {
+
+      if (vm.estimatenew.isturnback === '편도') {
+        vm.estimatenew.enddate = null;
+        vm.estimatenew.endtime = '';
+      } ///
+
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.form.estimatenewForm');
         return false;
@@ -51,51 +59,25 @@
       }
     }
 
-    // Customize below
+    ///
+    $scope.minDate1 = new Date();
+    $scope.open1 = function() {
+      $scope.opened1 = true;
+    };
+    $scope.open2 = function() {
+      $scope.opened2 = true;
+    };
+    $scope.dateOptions = {
+      formatYear: 'yy',
+      startingDay: 1,
+      showWeeks: false
+    };
 
-    // Init select-options in create view
-
-    // $scope.isturnback = $scope.isturnback || true;
-    // $scope.preferedbus = $scope.preferedbus || '상관없음';
-
-    // Datepicker & timepicker
-    // $scope.minDate1 = new Date();
-    //
-    // $scope.open1 = function() {
-    //   $scope.opened1 = true;
-    // };
-    //
-    // $scope.open2 = function() {
-    //   $scope.opened2 = true;
-    // };
-    //
-    // $scope.dateOptions = {
-    //   formatYear: 'yy',
-    //   startingDay: 1,
-    //   showWeeks: false
-    // };
-    //
-    // $scope.hours = ['자정', '오전 1시', '오전 2시', '오전 3시', '오전 4시', '오전 5시',
-    //                 '오전 6시', '오전 7시', '오전 8시', '오전 9시', '오전 10시', '오전 11시',
-    //                 '정오', '오후 1시', '오후 2시','오후 3시','오후 4시','오후 5시',
-    //                 '오후 6시', '오후 7시','오후 8시', '오후 9시', '오후 10시', '오후 11시'];
-    //
-    // $scope.$watchCollection('[dt1, tm1]', function(newValues, oldValues) {
-    //   $scope.startdatetime = $filter('date')(newValues[0], 'fullDate') + ' ' + newValues[1];
-    // });
-    //
-    // $scope.$watchCollection('[dt2, tm2]', function(newValues, oldValues) {
-    //   $scope.enddatetime = $filter('date')(newValues[0], 'fullDate') + ' ' + newValues[1];
-    // });
-    //
-    // $scope.$watch('isturnback', function(newValue, oldValue) {
-    //   if (!newValue) {
-    //     $scope.enddatetime = 'NA';
-    //   }
-    // });
-    //
-    // $scope.tripGoals = ['결혼식', '야유회', '워크샵', '산악회', 'MT', '단체관람', '기타'];
-    //
+    $scope.hours = ['자정', '오전 1시', '오전 2시', '오전 3시', '오전 4시', '오전 5시',
+                    '오전 6시', '오전 7시', '오전 8시', '오전 9시', '오전 10시', '오전 11시',
+                    '정오', '오후 1시', '오후 2시','오후 3시','오후 4시','오후 5시',
+                    '오후 6시', '오후 7시','오후 8시', '오후 9시', '오후 10시', '오후 11시'];
+    $scope.tripGoals = ['결혼식', '야유회', '워크샵', '산악회', 'MT', '단체관람', '기타'];
 
   }
 }());

@@ -20,8 +20,22 @@
         controller: 'EstimatenewsListController',
         controllerAs: 'vm',
         data: {
-          roles: ['user', 'admin','driver'],
+          roles: ['user', 'admin', 'driver'],
           pageTitle: 'Estimatenews List'
+        }
+      })
+      .state('estimatenews.createbidding', {
+        url: '/:estimatenewId/createbidding',
+        templateUrl: 'modules/estimatenews/client/views/create-bidding.client.view.html',
+        controller: 'BiddingCreateController',
+        controllerAs: 'vm',
+        resolve: {
+          estimatenewResolve: getEstimatenew,
+          biddingResolve: newBidding
+        },
+        data: {
+          roles: ['admin', 'driver'],
+          pageTitle: 'Bidding Create'
         }
       })
       .state('estimatenews.create', {
@@ -77,4 +91,11 @@
   function newEstimatenew(EstimatenewsService) {
     return new EstimatenewsService();
   }
+
+  newBidding.$inject = ['BiddingsService'];
+
+  function newBidding(BiddingsService) {
+    return new BiddingsService();
+  }
+
 }());

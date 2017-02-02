@@ -5,12 +5,13 @@
     .module('estimatenews')
     .controller('EstimatenewsListController', EstimatenewsListController);
 
-  EstimatenewsListController.$inject = ['EstimatenewsService','Authentication'];
+  EstimatenewsListController.$inject = ['EstimatenewsService','Authentication','BiddingsService'];
 
-  function EstimatenewsListController(EstimatenewsService,Authentication) {
+  function EstimatenewsListController(EstimatenewsService,Authentication,BiddingsService) {
     var vm = this;
-    vm.user=Authentication.user;
-//어드민은 전부 보여주고, 유저는 본인 것만 보여준다. query
+    vm.user = Authentication.user;
+
+    /// 어드민은 전부 보여주고, 유저는 본인 것만 보여준다. query
     if(_.includes(vm.user.roles,'admin')){
       // console.log('user is admin');
       vm.estimatenews = EstimatenewsService.query(); //admin
@@ -28,6 +29,10 @@
     //   console.log(result[0])
     // });
     // console.log(vm.estimatenews[0]);
+
+    // vm.biddingclick = function(num) {
+    //   console.log('index: ' + num);
+    // };
 
   }
 }());
