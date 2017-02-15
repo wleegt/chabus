@@ -10,10 +10,6 @@ var mongoose = require('mongoose'),
  * Estimatenew Schema
  */
 var EstimatenewSchema = new Schema({
-  kindofest: {
-    type: Boolean, // 일반견적 true, 통근견적 false
-    default: true
-  },
   startposition: {
     type: String,
     default: '',
@@ -52,10 +48,9 @@ var EstimatenewSchema = new Schema({
     trim: true
   },
   howmany: {
-    type: String,
-    default: '',
-    required: 'Please fill Estimatenew howmany',
-    trim: true
+    type: Number,
+    default: null,
+    required: 'Please fill Estimatenew howmany'
   },
   purpose: {
     type: String,
@@ -92,7 +87,15 @@ var EstimatenewSchema = new Schema({
     default: '',
     trim: true
   },
-  
+  bookingwith: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  biddingby: {
+    type: [String],
+  },
+
   created: {
     type: Date,
     default: Date.now

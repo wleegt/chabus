@@ -22,13 +22,22 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }]
   }, {
-    roles: ['user'],
+    roles: ['driver'],
     allows: [{
       resources: '/api/biddings',
       permissions: ['get', 'post']
     }, {
       resources: '/api/biddings/:biddingId',
       permissions: ['get']
+    }]
+  }, {
+    roles: ['person'],
+    allows: [{
+      resources: '/api/biddings',
+      permissions: ['get']
+    }, {
+      resources: '/api/biddings/:biddingId',
+      permissions: ['get', 'put', 'delete']
     }]
   }, {
     roles: ['guest'],

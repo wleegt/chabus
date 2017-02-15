@@ -20,6 +20,7 @@
         controller: 'BiddingsListController',
         controllerAs: 'vm',
         data: {
+          roles: ['person', 'admin', 'driver'],
           pageTitle: 'Biddings List'
         }
       })
@@ -32,7 +33,7 @@
           biddingResolve: newBidding
         },
         data: {
-          roles: ['user', 'admin'],
+          roles: ['driver', 'admin'],
           pageTitle: 'Biddings Create'
         }
       })
@@ -45,8 +46,8 @@
           biddingResolve: getBidding
         },
         data: {
-          roles: ['user', 'admin'],
-          pageTitle: 'Edit Bidding {{ biddingResolve.name }}'
+          roles: ['driver', 'admin'],
+          pageTitle: 'Edit Bidding'
         }
       })
       .state('biddings.view', {
@@ -58,7 +59,8 @@
           biddingResolve: getBidding
         },
         data: {
-          pageTitle: 'Bidding {{ biddingResolve.name }}'
+          roles: ['driver', 'admin'],
+          pageTitle: 'Bidding view'
         }
       });
   }

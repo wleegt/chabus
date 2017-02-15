@@ -1,40 +1,104 @@
 <section>
   <div class="page-header">
-    <h1 ng-bind="vm.estimatenew.name"></h1>
+    <h1>
+      전세버스 견적 상세
+      <a class="pull-right" ui-sref="estimatenews.list">
+        <i class="glyphicon glyphicon-circle-arrow-left"></i>
+      </a>
+    </h1>
   </div>
-  <div class="pull-right"
-       ng-show="vm.estimatenew.isCurrentUserOwner"> <!-- server.controller 에 exports.read 함수에 isCurrentUserOwner 값이 있음.-->
-    <a class="btn btn-primary"
-       ui-sref="estimatenews.edit({ estimatenewId: vm.estimatenew._id })">
-      <i class="glyphicon glyphicon-edit"></i>
-    </a>
-    <a class="btn btn-primary" ng-click="vm.remove()">
-      <i class="glyphicon glyphicon-trash"></i>
-    </a>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <small>
+        <em class="text-muted">
+          Posted on
+          <span ng-bind="vm.estimatenew.created | date:'mediumDate'"></span>
+          by
+          <span ng-if="vm.estimatenew.user"
+                ng-bind="vm.estimatenew.user.displayName"></span>
+          <span ng-if="!vm.estimatenew.user">Deleted User</span>
+        </em>
+      </small>
+    </div>
+    <div class="panel-body">
+      <div class="pull-right"
+           ng-show="vm.estimatenew.isCurrentUserOwner"> <!-- server.controller 에 exports.read 함수에 isCurrentUserOwner 값이 있음.-->
+        <a ng-hide="vm.user.roles.includes('person')" class="btn btn-primary"
+           ui-sref="estimatenews.edit({ estimatenewId: vm.estimatenew._id })">
+          <i class="glyphicon glyphicon-edit">수정</i>
+        </a>
+        <a ng-show="!vm.estimatenew.bookingwith || vm.user.roles.includes('admin')" class="btn btn-danger" ng-click="vm.remove()" tooltip="기사님과 예약 확정후에는 삭제가 불가합니다.">
+          <i class="glyphicon glyphicon-trash">삭제</i>
+        </a>
+      </div>
+      <p>출발지: {{vm.estimatenew.startposition}}</p>
+      <p>도착지: {{vm.estimatenew.endposition}}</p>
+      <p>타입: {{vm.estimatenew.isturnback}} <span ng-show="vm.estimatenew.isturnback==='왕복'">({{dateDiff(vm.estimatenew.startdate, vm.estimatenew.enddate)}})</span></p>
+      <p>출발일정: {{vm.estimatenew.startdate | date:'fullDate'}} {{vm.estimatenew.starttime}}</p>
+      <p ng-show="vm.estimatenew.isturnback==='왕복'">복귀일정: {{vm.estimatenew.enddate | date:'fullDate'}} {{vm.estimatenew.endtime}}</p>
+      <p>탑승인원: {{vm.estimatenew.howmany}}명</p>
+      <p>사용목적: {{vm.estimatenew.purpose}}</p>
+      <p class="text-danger" ng-show="vm.user.roles.includes('driver')">연락처: <i tooltip="손님과 예약후 수수료를 납부하셔야 조회가 가능합니다." class="glyphicon glyphicon-question-sign"></i></p>
+      <p ng-show="vm.user.roles.includes('person') || vm.user.roles.includes('admin')">연락처: {{vm.estimatenew.phone}}</p>
+      <p>세금계산서 및 현금영수증 발행: {{vm.estimatenew.taxinvoice ? '요청' : '불필요'}}</p>
+      <p>신용카드 결제: {{vm.estimatenew.creditcard ? '요청' : '불필요'}}</p>
+      <p>확정 예약가격: {{vm.estimatenew.quickprice}}만원</p>
+      <p>선호하는 버스: {{vm.estimatenew.preferedbus}}</p>
+      <p>남김말: {{vm.estimatenew.message}}</p>
+    </div>
   </div>
-  <small>
-    <em class="text-muted">
-      Posted on
-      <span ng-bind="vm.estimatenew.created | date:'mediumDate'"></span>
-      by
-      <span ng-if="vm.estimatenew.user"
-            ng-bind="vm.estimatenew.user.displayName"></span>
-      <span ng-if="!vm.estimatenew.user">Deleted User</span>
-    </em>
-  </small>
-  <p class="lead" ng-bind="vm.estimatenew.kindofest"></p>
-  <p class="lead" ng-bind="vm.estimatenew.startposition"></p>
-  <p class="lead" ng-bind="vm.estimatenew.endposition"></p>
-  <p class="lead" ng-bind="vm.estimatenew.isturnback"></p>
-  <p class="lead">{{vm.estimatenew.startdate | date:'fullDate'}} {{vm.estimatenew.starttime}}</p>
-  <p class="lead">{{vm.estimatenew.enddate | date:'fullDate'}} {{vm.estimatenew.endtime}}</p>
-  <p class="lead" ng-bind="vm.estimatenew.howmany"></p>
-  <p class="lead" ng-bind="vm.estimatenew.purpose"></p>
-  <p class="lead" ng-bind="vm.estimatenew.phone"></p>
-  <p class="lead" ng-bind="vm.estimatenew.taxinvoice"></p>
-  <p class="lead" ng-bind="vm.estimatenew.creditcard"></p>
-  <p class="lead" ng-bind="vm.estimatenew.quickprice"></p>
-  <p class="lead" ng-bind="vm.estimatenew.preferedbus"></p>
-  <p class="lead" ng-bind="vm.estimatenew.message"></p>
+  <hr />
 
+  <div class="page-header">
+    <h1 ng-show="vm.user.roles.includes('driver')">나의 입찰</h1>
+    <h1 ng-show="vm.user.roles.includes('person') || vm.user.roles.includes('admin')">입찰 리스트</h1>
+  </div>
+  <div class="alert alert-info text-center" ng-if="vm.estimatenew.bookingwith">
+    기사님에게 예약 신청이 전달되었습니다. 홈버스를 이용해주셔서 감사합니다.
+  </div>
+  <accordion>
+    <div accordion-group class="panel-default" is-open="isopened[$index]" ng-repeat="bidding in vm.biddings">
+      <accordion-heading>
+        <small class="list-group-item-text">
+          Posted on
+          <span ng-bind="bidding.created | date:'mediumDate'"></span>
+          by
+          <span ng-if="bidding.user" ng-bind="bidding.user.displayName"></span>
+          <span ng-if="!bidding.user">Deleted User</span>
+        </small>
+        <p class="list-group-item-text">견적금액: {{bidding.biddingprice}}만원
+          <span class="label label-warning" ng-show="vm.estimatenew.bookingwith === bidding.user._id">예약중</span>
+          <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isopened[$index], 'glyphicon-chevron-right': !isopened[$index]}"></i>
+        </p>
+      </accordion-heading>
+      <p class="list-group-item-text">포함된 부대비용:
+        <span ng-class="{strike: !bidding.toll}"> 톨비,</span>
+        <span ng-class="{strike: !bidding.parkingfee}"> 주차비,</span>
+        <span ng-class="{strike: !bidding.mealprice}"> 식사비,</span>
+        <span ng-class="{strike: !bidding.roomcharge}"> 숙박비,</span>
+        <span ng-class="{strike: !bidding.servicecharge}"> 봉사료,</span>
+        <span ng-class="{strike: !bidding.vat}"> 부가세(10%)</span>
+      </p>
+      <p class="list-group-item-text">결제정보:
+        {{bidding.creditcard ? ' 신용카드 가능,' : ' 신용카드 불가,'}}
+        {{bidding.taxinvoice ? ' 세금 계산서 및 영수증 발행 가능' : ' 세금 계산서 및 영수증 발행 불가'}}
+      </p>
+      <p class="list-group-item-text">기사님 한마디: {{bidding.message}}</p>
+      <a class="btn btn-danger" ng-show="!vm.estimatenew.bookingwith && (vm.user.roles.includes('person') || vm.user.roles.includes('admin'))"
+       ng-click="vm.book(bidding._id)">이 기사님과 예약하기</a>
+      <a class="btn btn-primary" ng-show="vm.user.roles.includes('admin')"
+       ui-sref="estimatenews.editbidding({ estimatenewId: vm.estimatenew._id, biddingId: bidding._id })"><i class="glyphicon glyphicon-edit">수정</i></a>
+      <a class="btn btn-danger" ng-show="((vm.user._id === bidding.user._id) && !vm.estimatenew.bookingwith) || vm.user.roles.includes('admin')"
+       ng-click="vm.removebidding(bidding._id)" tooltip="이 입찰로 예약이 확정된 후에는 삭제가 불가합니다."><i class="glyphicon glyphicon-trash">삭제</i></a>
+    </div>
+  </accordion>
+
+  <div class="alert alert-warning text-center" ng-if="vm.biddings.$resolved && !vm.biddings.length">
+    <span ng-show="vm.user.roles.includes('person')">
+      아직 입찰한 기사님이 없습니다. 잠시후 다시 확인하세요.
+    </span>
+    <span ng-show="vm.user.roles.includes('driver') || vm.user.roles.includes('admin')">
+      이 견적에 아직 입찰하지 않았습니다. <a ui-sref="estimatenews.createbidding({ estimatenewId: vm.estimatenew._id })">입찰신청</a>하겠습니까?
+    </span>
+  </div>
 </section>

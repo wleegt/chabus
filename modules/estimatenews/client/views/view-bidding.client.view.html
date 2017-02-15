@@ -1,0 +1,86 @@
+<section>
+  <div class="page-header">
+    <h1>
+      전세버스 견적 상세
+      <a class="pull-right" ui-sref="estimatenews.list">
+        <i class="glyphicon glyphicon-circle-arrow-left"></i>
+      </a>
+    </h1>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <small>
+        <em class="text-muted">
+          Posted on
+          <span ng-bind="vm.estimatenew.created | date:'mediumDate'"></span>
+          by
+          <span ng-if="vm.estimatenew.user"
+                ng-bind="vm.estimatenew.user.displayName"></span>
+          <span ng-if="!vm.estimatenew.user">Deleted User</span>
+        </em>
+      </small>
+    </div>
+    <div class="panel-body">
+      <p>출발지: {{vm.estimatenew.startposition}}</p>
+      <p>도착지: {{vm.estimatenew.endposition}}</p>
+      <p>타입: {{vm.estimatenew.isturnback}} <span ng-show="vm.estimatenew.isturnback==='왕복'">({{dateDiff(vm.estimatenew.startdate, vm.estimatenew.enddate)}})</span></p>
+      <p>출발일정: {{vm.estimatenew.startdate | date:'fullDate'}} {{vm.estimatenew.starttime}}</p>
+      <p ng-show="vm.estimatenew.isturnback==='왕복'">복귀일정: {{vm.estimatenew.enddate | date:'fullDate'}} {{vm.estimatenew.endtime}}</p>
+      <p>탑승인원: {{vm.estimatenew.howmany}}명</p>
+      <p>사용목적: {{vm.estimatenew.purpose}}</p>
+      <p>연락처: <i tooltip="손님과 예약후 수수료를 납부하셔야 조회가 가능합니다." class="glyphicon glyphicon-question-sign"></i></p>
+      <p>세금계산서 및 현금영수증 발행: {{vm.estimatenew.taxinvoice ? '요청' : '불필요'}}</p>
+      <p>신용카드 결제: {{vm.estimatenew.creditcard ? '요청' : '불필요'}}</p>
+      <p>확정 예약가격: {{vm.estimatenew.quickprice}}만원</p>
+      <p>선호하는 버스: {{vm.estimatenew.preferedbus}}</p>
+      <p>남김말: {{vm.estimatenew.message}}</p>
+    </div>
+  </div>
+  <hr />
+
+  <div class="page-header">
+    <h1>나의 입찰</h1>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <small>
+        <em class="text-muted">
+          Posted on
+          <span ng-bind="vm.bidding.created | date:'mediumDate'"></span>
+          by
+          <span ng-if="vm.bidding.user"
+                ng-bind="vm.bidding.user.displayName"></span>
+          <span ng-if="!vm.bidding.user">Deleted User</span>
+        </em>
+      </small>
+    </div>
+    <div class="panel-body">
+      <div class="pull-right"
+           ng-show="vm.bidding.isCurrentUserOwner">
+        <a ng-hide="vm.user.roles.includes('driver')" class="btn btn-primary"
+           ui-sref="estimatenews.editbidding({ biddingId: vm.bidding._id })">
+          <i class="glyphicon glyphicon-edit">수정</i>
+        </a>
+        <a class="btn btn-danger" ng-click="vm.remove()" tooltip="손님이 예약 확정후에는 삭제가 불가합니다.">
+          <i class="glyphicon glyphicon-trash">삭제</i>
+        </a>
+      </div>
+      <p>견적금액: {{vm.bidding.biddingprice}}만원</p>
+      <p>포함된 부대비용:
+        <span ng-class="{strike: !vm.bidding.toll}"> 톨비,</span>
+        <span ng-class="{strike: !vm.bidding.parkingfee}"> 주차비,</span>
+        <span ng-class="{strike: !vm.bidding.mealprice}"> 식사비,</span>
+        <span ng-class="{strike: !vm.bidding.roomcharge}"> 숙박비,</span>
+        <span ng-class="{strike: !vm.bidding.servicecharge}"> 봉사료,</span>
+        <span ng-class="{strike: !vm.bidding.vat}"> 부가세(10%)</span>
+      </p>
+      <p>결제정보:
+        {{vm.bidding.creditcard ? ' 신용카드 가능,' : ' 신용카드 불가,'}}
+        {{vm.bidding.taxinvoice ? ' 세금 계산서 및 영수증 발행 가능' : ' 세금 계산서 및 영수증 발행 불가'}}
+      </p>
+      <p>기사님 한마디: {{vm.bidding.message}}</p>
+    </div>
+  </div>
+
+</section>

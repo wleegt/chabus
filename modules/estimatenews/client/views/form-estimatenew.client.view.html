@@ -1,27 +1,21 @@
 <section>
   <div class="page-header">
-    <h1>{{vm.estimatenew._id ? 'Edit Estimatenew' : 'New Estimatenew'}}</h1>
+    <h1>{{vm.estimatenew._id ? '전세버스 견적 수정' : '전세버스 견적 작성'}}</h1>
   </div>
-  <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+  <!-- <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2"> -->
+  <div class="col-md-12">
     <form name="vm.form.estimatenewForm" class="form-horizontal" ng-submit="vm.save(vm.form.estimatenewForm.$valid)" novalidate>
       <fieldset>
-        <div class="form-group" show-errors>
-          <label for="kindofest">견적종류(true: 일반, false: 통근)</label>
-          <input name="kindofest" type="text" ng-model="vm.estimatenew.kindofest" id="kindofest" class="form-control" placeholder="견적 종류(true: 일반, false: 통근)" >
-          <div ng-messages="vm.form.estimatenewForm.kindofest.$error" role="alert">
-            <p class="help-block error-text" >필수 입력항목</p>
-          </div>
-        </div>
         <div class="form-group" show-errors>
           <label for="startposition">출발지</label>
           <input name="startposition" type="text" ng-model="vm.estimatenew.startposition" id="startposition" class="form-control" placeholder="출발 장소를 입력하세요" required>
           <div ng-messages="vm.form.estimatenewForm.startposition.$error" role="alert">
             <p class="help-block error-text" ng-message="required">필수 입력항목</p>
           </div>
-          <br />
+          <!-- <br />
           <div>
             <ng-map center="[40.74, -74.18]"></ng-map>
-          </div>
+          </div> -->
         </div>
 
         <div class="form-group" show-errors>
@@ -97,9 +91,10 @@
           </div>
         </div>
 
-        <div class="form-group" show-errors>
+        <div class="form-group has-feedback" show-errors>
           <label for="howmany">탑승인원</label>
-          <input name="howmany" type="text" ng-model="vm.estimatenew.howmany" id="howmany" class="form-control" placeholder="탑승하실 인원을 입력해주세요" required>
+          <input name="howmany" type="number" min="0" ng-model="vm.estimatenew.howmany" id="howmany" class="form-control" placeholder="탑승하실 인원을 입력해주세요" required>
+          <span class="form-control-feedback"> 명</span>
           <div ng-messages="vm.form.estimatenewForm.howmany.$error" role="alert">
             <p class="help-block error-text" ng-message="required">필수 입력항목</p>
           </div>
@@ -133,11 +128,11 @@
           <label>결제 요구사항 <span class="text-muted">(선택 입력사항)</span></label>
           <ul class="list-group">
             <li class="list-group-item">
-              <span class="text-muted">세금계산서 및 현금영수증 발행</span>
+              <span ng-class="vm.estimatenew.taxinvoice === true ? 'text-danger' : 'text-muted'">세금계산서 및 현금영수증 발행</span>
               <input name="taxinvoice" class="pull-right" type="checkbox" ng-model="vm.estimatenew.taxinvoice">
             </li>
             <li class="list-group-item">
-              <span class="text-muted">신용카드 결제</span>
+              <span ng-class="vm.estimatenew.creditcard === true ? 'text-danger' : 'text-muted'">신용카드 결제</span>
               <input name="creditcard" class="pull-right" type="checkbox" ng-model="vm.estimatenew.creditcard">
             </li>
           </ul>
@@ -147,7 +142,7 @@
             <span class="text-muted">(선택 입력사항)</span>
             <a tooltip="'이 가격에 맞춰주시면 무조건 갑니다' 라고 기사님께 먼저 제안하는 기능으로, 이 가격에 맞춘 기사님과 예약이 자동으로 확정됩니다. 확정 예약가는 설정 후에도 언제든지 변경 가능합니다."><i class="glyphicon glyphicon-question-sign"></i></a>
           </label>
-          <input name="quickprice" type="number" min="0" ng-model="vm.estimatenew.quickprice" id="quickprice" class="form-control" placeholder="확정 예약가격을 입력해주세요.">
+          <input name="quickprice" type="number" min="0" ng-model="vm.estimatenew.quickprice" id="quickprice" class="form-control" placeholder="확정 예약가격을 입력해주세요">
           <span class="form-control-feedback"> 만원</span>
         </div>
         <div class="form-group">
@@ -171,7 +166,7 @@
         <hr />
 
         <div class="form-group">
-          <button type="submit" class="btn btn-default">{{vm.estimatenew._id ? 'Update' : 'Create'}}</button>
+          <button type="submit" class="btn btn-default">{{vm.estimatenew._id ? '수정' : '신청'}}</button>
           <br /><small>* 다음 단계로 진행하시면 홈버스 <a>이용약관</a> 및 <a>개인정보 취급방침</a>에 동의하시는 것으로 간주됩니다.</small>
         </div>
         <div ng-show="vm.error" class="text-danger">

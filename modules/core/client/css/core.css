@@ -63,6 +63,18 @@ a {
   color: white;
 }
 
+/**/
+
+.strike {
+  text-decoration: line-through;
+  color: gray;
+}
+.accordion-toggle:focus {
+  outline: none;
+  text-decoration: none;
+}
+
+
 .bus{
   /*position: absolute;*/
   max-width: 100%;

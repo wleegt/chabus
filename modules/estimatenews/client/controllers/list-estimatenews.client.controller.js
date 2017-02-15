@@ -5,34 +5,30 @@
     .module('estimatenews')
     .controller('EstimatenewsListController', EstimatenewsListController);
 
-  EstimatenewsListController.$inject = ['EstimatenewsService','Authentication','BiddingsService'];
+  EstimatenewsListController.$inject = ['$scope', 'EstimatenewsService','Authentication'];
 
-  function EstimatenewsListController(EstimatenewsService,Authentication,BiddingsService) {
+  function EstimatenewsListController($scope, EstimatenewsService, Authentication) {
     var vm = this;
     vm.user = Authentication.user;
 
-    /// 어드민은 전부 보여주고, 유저는 본인 것만 보여준다. query
-    if(_.includes(vm.user.roles,'admin')){
-      // console.log('user is admin');
-      vm.estimatenews = EstimatenewsService.query(); //admin
-    } else if(_.includes(vm.user.roles,'driver')){
-      console.log('driver is 일반');
-      vm.estimatenews = EstimatenewsService.query({kindofest: true});
-    } else if(_.includes(vm.user.roles,'comdriver')){
-      console.log('driver is 통근');
-      vm.estimatenews = EstimatenewsService.query({kindofest: false});
-    } else {
-      // console.log('user');
-      vm.estimatenews = EstimatenewsService.query({user: vm.user._id}); //user
+    /// admin, driver은 전부 보여주고, person은 본인 것만 보여준다
+    if(_.includes(vm.user.roles,'admin') || _.includes(vm.user.roles,'driver')) {
+      vm.estimatenews = EstimatenewsService.query();
+    } else if(_.includes(vm.user.roles,'person')) {
+      vm.estimatenews = EstimatenewsService.query({user: vm.user._id});
     }
-    // vm.estimatenews.$promise.then(function(result){
-    //   console.log(result[0])
-    // });
-    // console.log(vm.estimatenews[0]);
 
-    // vm.biddingclick = function(num) {
-    //   console.log('index: ' + num);
-    // };
 
+    $scope.dateDiff = function(date1Str, date2Str) {
+      if (date2Str === null) {
+        return '';
+      } else {
+        var date1 = new Date(Date.parse(date1Str));
+        var date2 = new Date(Date.parse(date2Str));
+        var diffInDays = date2.getDate() - date1.getDate();
+        var daysStr = diffInDays > 0 ? (diffInDays + '박' + (diffInDays + 1) +'일') : '당일';
+        return daysStr;
+      }
+    };
   }
 }());

@@ -22,7 +22,7 @@ exports.invokeRolesPolicies = function () {
       permissions: '*'
     }]
   }, {
-    roles: ['user'],
+    roles: ['person'],
     allows: [{
       resources: '/api/estimatenews',
       permissions: ['get', 'post']
@@ -34,19 +34,10 @@ exports.invokeRolesPolicies = function () {
     roles: ['driver'],
     allows: [{
       resources: '/api/estimatenews',
-      permissions: ['get', 'post']
+      permissions: ['get']
     }, {
       resources: '/api/estimatenews/:estimatenewId',
-      permissions: ['get']
-    }]
-  }, {
-    roles: ['comdriver'],
-    allows: [{
-      resources: '/api/estimatenews',
-      permissions: ['get', 'post']
-    }, {
-      resources: '/api/estimatenews/:estimatenewId',
-      permissions: ['get']
+      permissions: ['get', 'put']
     }]
   }, {
     roles: ['guest'],

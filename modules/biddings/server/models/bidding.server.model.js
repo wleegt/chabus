@@ -11,10 +11,54 @@ var mongoose = require('mongoose'),
  */
 var BiddingSchema = new Schema({
   biddingprice: {
+    type: Number,
+    default: null,
+    required: 'Please fill Bidding biddingprice'
+  },
+  toll: {
+    type: Boolean,
+    default: false
+  },
+  parkingfee: {
+    type: Boolean,
+    default: false
+  },
+  mealprice: {
+    type: Boolean,
+    default: false
+  },
+  roomcharge: {
+    type: Boolean,
+    default: false
+  },
+  servicecharge: {
+    type: Boolean,
+    default: false
+  },
+  vat: {
+    type: Boolean,
+    default: false
+  },
+  creditcard: {
+    type: Boolean,
+    default: false
+  },
+  taxinvoice: {
+    type: Boolean,
+    default: false
+  },
+  message: {
     type: String,
     default: '',
-    required: 'Please fill Bidding biddingprice',
     trim: true
+  },
+  isbooked: {
+    type: Boolean,
+    default: false
+  },
+  ispayed: {
+    type: Boolean,
+    default: false
   },
   created: {
     type: Date,

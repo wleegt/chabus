@@ -1,9 +1,10 @@
 <section>
   <div class="page-header">
-    <h1>Estimatenews</h1>
+    <h1>전세버스 견적 리스트</h1>
   </div>
   <div class="list-group">
-    <div ng-repeat="estimatenew in vm.estimatenews"
+    <a ng-repeat="estimatenew in vm.estimatenews"
+       ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })"
        class="list-group-item">
       <small class="list-group-item-text">
         Posted on
@@ -12,26 +13,25 @@
         <span ng-if="estimatenew.user" ng-bind="estimatenew.user.displayName"></span>
         <span ng-if="!estimatenew.user">Deleted User</span>
       </small>
-      <h4 class="list-group-item-heading" ng-bind="estimatenew.kindofest"></h4>
-      <p class="list-group-item-text" ng-bind="estimatenew.startposition"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.endposition"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.isturnback"></p>
-      <p class="list-group-item-text">{{estimatenew.startdate | date:'fullDate'}} {{estimatenew.starttime}}</p>
-      <p class="list-group-item-text">{{estimatenew.enddate | date:'fullDate'}} {{estimatenew.endtime}}</p>
-      <p class="list-group-item-text" ng-bind="estimatenew.howmany"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.purpose"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.phone"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.taxinvoice"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.creditcard"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.quickprice"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.preferedbus"></p>
-      <p class="list-group-item-text" ng-bind="estimatenew.message"></p>
-      <!-- <a class="btn btn-default" ng-click="vm.biddingclick(estimatenew._id)">입찰하기</a> -->
-      <a class="btn btn-default" ui-sref="estimatenews.createbidding({ estimatenewId: estimatenew._id })">입찰하기</a>
-      <a class="btn btn-default" ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })">상세보기</a>
-    </div>
+      <p class="list-group-item-text">출발지: {{estimatenew.startposition}}</p>
+      <p class="list-group-item-text">도착지: {{estimatenew.endposition}}</p>
+      <p class="list-group-item-text">일정: {{estimatenew.isturnback}}, {{estimatenew.startdate | date:'longDate'}} {{dateDiff(estimatenew.startdate, estimatenew.enddate)}}</p>
+      <p class="list-group-item-text">인원: {{estimatenew.howmany}}명 (버스 타입: {{estimatenew.preferedbus}})
+        <span class="badge pull-right">입찰 {{estimatenew.biddingby.length}}</span>
+      </p>
+      <p class="list-group-item-text">
+        <span ng-show="estimatenew.biddingby.includes(vm.user._id) && (estimatenew.bookingwith !== vm.user._id)" class="label label-danger">입찰중</span>
+        <span ng-show="estimatenew.bookingwith && ((estimatenew.bookingwith === vm.user._id) || vm.user.roles.includes('person') || vm.user.roles.includes('admin'))" class="label label-warning">예약중</span>
+      </p>
+      <p class="list-group-item-text">
+        <span ng-show="estimatenew.bookingwith && vm.user.roles.includes('driver') && (estimatenew.bookingwith !== vm.user._id)" class="text-danger">다른 기사분과 예약중입니다.</span>
+      </p>
+      <!-- <a class="btn btn-default" ui-sref="estimatenews.view({ estimatenewId: estimatenew._id })">상세보기</a> -->
+      <!-- <a ng-show="vm.user.roles.includes('driver') || vm.user.roles.includes('admin')" class="btn" ng-class="estimatenew.biddingby.includes(vm.user._id) ? 'btn-danger disabled' : 'btn-primary'" ui-sref="estimatenews.createbidding({ estimatenewId: estimatenew._id })">{{estimatenew.biddingby.includes(vm.user._id) ? '입찰중' : '입찰하기'}}</a> -->
+    </a>
   </div>
   <div class="alert alert-warning text-center" ng-if="vm.estimatenews.$resolved && !vm.estimatenews.length">
-    No Estimatenews yet, why don't you <a ui-sref="estimatenews.create">create one</a>?
+    작성된 견적이 없습니다. <span ng-show="vm.user.roles.includes('person') || vm.user.roles.includes('admin')"><a ui-sref="estimatenews.create">새로운 견적</a>을 작성하겠습니까?</span>
   </div>
+
 </section>

@@ -18,10 +18,9 @@
     vm.remove = remove;
     vm.save = save;
 
-
     // Remove existing Bidding
     function remove() {
-      if ($window.confirm('Are you sure you want to delete?')) {
+      if ($window.confirm('정말 삭제하겠습니까?')) {
         vm.bidding.$remove($state.go('biddings.list'));
       }
     }
