@@ -23,11 +23,11 @@
     <div class="panel-body">
       <div class="pull-right"
            ng-show="vm.estimatenew.isCurrentUserOwner"> <!-- server.controller 에 exports.read 함수에 isCurrentUserOwner 값이 있음.-->
-        <a ng-hide="vm.user.roles.includes('person')" class="btn btn-primary"
+        <a ng-show="vm.user.roles.includes('admin')" class="btn btn-primary"
            ui-sref="estimatenews.edit({ estimatenewId: vm.estimatenew._id })">
           <i class="glyphicon glyphicon-edit">수정</i>
         </a>
-        <a ng-show="!vm.estimatenew.bookingwith || vm.user.roles.includes('admin')" class="btn btn-danger" ng-click="vm.remove()" tooltip="기사님과 예약 확정후에는 삭제가 불가합니다.">
+        <a ng-show="!vm.estimatenew.bookingwith || vm.user.roles.includes('admin')" class="btn btn-danger" ng-click="vm.remove()" tooltip="기사님과 예약 후에는 삭제가 불가합니다.">
           <i class="glyphicon glyphicon-trash">삭제</i>
         </a>
       </div>
@@ -44,6 +44,7 @@
       <p>신용카드 결제: {{vm.estimatenew.creditcard ? '요청' : '불필요'}}</p>
       <p>확정 예약가격: {{vm.estimatenew.quickprice}}만원</p>
       <p>선호하는 버스: {{vm.estimatenew.preferedbus}}</p>
+      <p>신청 버스 대수: {{vm.estimatenew.buscount}}대</p>
       <p>남김말: {{vm.estimatenew.message}}</p>
     </div>
   </div>
@@ -53,8 +54,8 @@
     <h1 ng-show="vm.user.roles.includes('driver')">나의 입찰</h1>
     <h1 ng-show="vm.user.roles.includes('person') || vm.user.roles.includes('admin')">입찰 리스트</h1>
   </div>
-  <div class="alert alert-info text-center" ng-if="vm.estimatenew.bookingwith">
-    기사님에게 예약 신청이 전달되었습니다. 홈버스를 이용해주셔서 감사합니다.
+  <div class="alert alert-info text-center" ng-if="vm.estimatenew.bookingwith && vm.user.roles.includes('person')">
+    선택하신 기사님에게 예약 신청이 전달되었습니다. 홈버스를 이용해주셔서 감사합니다.
   </div>
   <accordion>
     <div accordion-group class="panel-default" is-open="isopened[$index]" ng-repeat="bidding in vm.biddings">
@@ -67,10 +68,19 @@
           <span ng-if="!bidding.user">Deleted User</span>
         </small>
         <p class="list-group-item-text">견적금액: {{bidding.biddingprice}}만원
-          <span class="label label-warning" ng-show="vm.estimatenew.bookingwith === bidding.user._id">예약중</span>
+          <span class="label label-warning" ng-show="bidding.isbooked">예약중</span>
+          <span class="label label-danger" ng-show="bidding.isbooked && !bidding.ispayed && (vm.user.roles.includes('admin') || vm.user.roles.includes('driver'))">수수료 미납</span>
+          <span class="label label-success" ng-show="bidding.isbooked && bidding.ispayed && (vm.user.roles.includes('admin') || vm.user.roles.includes('driver'))">수수료 납부 완료</span>
           <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': isopened[$index], 'glyphicon-chevron-right': !isopened[$index]}"></i>
         </p>
       </accordion-heading>
+      <div class="alert alert-danger" ng-show="bidding.isbooked && !bidding.ispayed && vm.user.roles.includes('driver')">
+        수수료 {{bidding.biddingprice*1000 | currency:"":0}}원을 입급하셔야 예약 손님 연락처가 공개됩니다. (기업은행 123-456-7890 예금주: 홈버스 주식회사)
+      </div>
+      <div class="alert alert-success" ng-show="bidding.isbooked && bidding.ispayed && vm.user.roles.includes('driver')">
+        수수료 {{bidding.biddingprice*1000 | currency:"":0}}원 납부가 확인되었습니다. 홈버스를 이용해주셔서 감사합니다.<br />예약 손님 연락처: <strong>{{vm.estimatenew.phone}}</strong>
+      </div>
+
       <p class="list-group-item-text">포함된 부대비용:
         <span ng-class="{strike: !bidding.toll}"> 톨비,</span>
         <span ng-class="{strike: !bidding.parkingfee}"> 주차비,</span>
@@ -84,12 +94,13 @@
         {{bidding.taxinvoice ? ' 세금 계산서 및 영수증 발행 가능' : ' 세금 계산서 및 영수증 발행 불가'}}
       </p>
       <p class="list-group-item-text">기사님 한마디: {{bidding.message}}</p>
+
       <a class="btn btn-danger" ng-show="!vm.estimatenew.bookingwith && (vm.user.roles.includes('person') || vm.user.roles.includes('admin'))"
        ng-click="vm.book(bidding._id)">이 기사님과 예약하기</a>
       <a class="btn btn-primary" ng-show="vm.user.roles.includes('admin')"
        ui-sref="estimatenews.editbidding({ estimatenewId: vm.estimatenew._id, biddingId: bidding._id })"><i class="glyphicon glyphicon-edit">수정</i></a>
-      <a class="btn btn-danger" ng-show="((vm.user._id === bidding.user._id) && !vm.estimatenew.bookingwith) || vm.user.roles.includes('admin')"
-       ng-click="vm.removebidding(bidding._id)" tooltip="이 입찰로 예약이 확정된 후에는 삭제가 불가합니다."><i class="glyphicon glyphicon-trash">삭제</i></a>
+      <a class="btn btn-danger" ng-show="vm.user.roles.includes('admin') || ((vm.user._id === bidding.user._id) && !vm.estimatenew.bookingwith)"
+       ng-click="vm.removebidding(bidding._id)" tooltip="이 입찰로 예약 확정된 후에는 삭제가 불가합니다."><i class="glyphicon glyphicon-trash">삭제</i></a>
     </div>
   </accordion>
 

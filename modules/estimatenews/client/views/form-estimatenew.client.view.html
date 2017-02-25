@@ -157,12 +157,31 @@
           </div>
         </div>
 
+        <div class="form-group has-feedback">
+          <label>신청 버스 대수
+            <span class="text-muted">(선택 입력사항)</span>
+          </label>
+          <input name="buscount" type="number" min="0" step="1" ng-model="vm.estimatenew.buscount" id="buscount" class="form-control" placeholder="신청하시는 버스 대수를 입력하세요 (미입력시 기본 1대)">
+          <span class="form-control-feedback"> 대</span>
+        </div>
+
         <div class="form-group">
           <label for="message">남김말
             <span class="text-muted">(선택 입력사항)</span>
           </label>
           <textarea name="message" ng-model="vm.estimatenew.message" id="message" class="form-control" cols="30" rows="3" placeholder="경유지나 추가 요청사항을 입력하세요"></textarea>
         </div>
+
+        <div class="form-group" ng-show="vm.estimatenew._id">
+          <label class="text-danger">** 입찰신청 기사님들 user id 리스트 (admin only) **</label>
+          <input name="biddingby" type="text" ng-model="vm.estimatenew.biddingby" id="biddingby" class="form-control">
+        </div>
+
+        <div class="form-group" ng-show="vm.estimatenew._id">
+          <label class="text-danger">** 예약확정 기사님 user id (admin only) **</label>
+          <input name="bookingwith" type="text" ng-model="vm.estimatenew.bookingwith" id="bookingwith" class="form-control">
+        </div>
+
         <hr />
 
         <div class="form-group">

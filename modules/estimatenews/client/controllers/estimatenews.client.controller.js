@@ -30,7 +30,6 @@
       vm.biddings = BiddingsService.query({user: vm.user._id, estimatenewId: vm.estimatenew._id});
     }
 
-
     $scope.dateDiff = function(date1Str, date2Str) {
       var date1 = new Date(Date.parse(date1Str));
       var date2 = new Date(Date.parse(date2Str));
@@ -60,10 +59,16 @@
       if ($window.confirm('정말 삭제하겠습니까?')) {
         vm.biddings.$promise.then(function(biddings) {
           var selectedbid = _.find(biddings, {_id: id});
+          // var selectedbid = biddings[0];
+
           if (selectedbid._id) {
             selectedbid.$remove(function() {
-              //remove bidding driver user id in estimatenew
+              // remove biddingby driver user id
               vm.estimatenew.biddingby = _.without(vm.estimatenew.biddingby, selectedbid.user._id);
+              // force to remove bookingwith driver user id if matched (only for admin)
+              if (_.includes(vm.user.roles,'admin') && selectedbid.isbooked) {
+                vm.estimatenew.bookingwith = '';
+              }
               vm.estimatenew.$update(function() {
                 // console.log('bidding user id removed');
               }, function() {
@@ -73,6 +78,8 @@
             }, function() {
               console.log('bidding remove failed!');
             });
+          } else {
+            console.log('bidding was already removed');
           }
         });
       }
@@ -108,7 +115,7 @@
             }
           }
         } else {
-          // booked already..
+          console.log('booked already...');
         }
       });
     }
@@ -120,6 +127,8 @@
         vm.estimatenew.enddate = null;
         vm.estimatenew.endtime = '';
       } ///
+
+      vm.estimatenew.buscount = vm.estimatenew.buscount || 1; ///
 
       if (!isValid) {
         $scope.$broadcast('show-errors-check-validity', 'vm.form.estimatenewForm');

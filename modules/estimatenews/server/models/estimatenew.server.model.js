@@ -82,6 +82,10 @@ var EstimatenewSchema = new Schema({
     default: '',
     trim: true
   },
+  buscount: {
+    type: Number,
+    default: null
+  },
   message: {
     type: String,
     default: '',

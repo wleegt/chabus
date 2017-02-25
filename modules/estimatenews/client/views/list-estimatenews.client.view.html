@@ -17,7 +17,7 @@
       <p class="list-group-item-text">도착지: {{estimatenew.endposition}}</p>
       <p class="list-group-item-text">일정: {{estimatenew.isturnback}}, {{estimatenew.startdate | date:'longDate'}} {{dateDiff(estimatenew.startdate, estimatenew.enddate)}}</p>
       <p class="list-group-item-text">인원: {{estimatenew.howmany}}명 (버스 타입: {{estimatenew.preferedbus}})
-        <span class="badge pull-right">입찰 {{estimatenew.biddingby.length}}</span>
+        <span class="badge pull-right">입찰 {{estimatenew.biddingby.length > 10 ? '10+' : estimatenew.biddingby.length}}</span>
       </p>
       <p class="list-group-item-text">
         <span ng-show="estimatenew.biddingby.includes(vm.user._id) && (estimatenew.bookingwith !== vm.user._id)" class="label label-danger">입찰중</span>
