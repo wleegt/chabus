@@ -38,7 +38,8 @@ a:hover .header-profile-image {
 
 
 .navbar-inverse {
-    background-image: linear-gradient(to bottom, #d00f0f 0%, #b30000 100%);
+    /*background-image: linear-gradient(to bottom, #d00f0f 0%, #b30000 100%);*/
+        background-image: none;
 }
 .navbar {
     background-color: #00b4c8;

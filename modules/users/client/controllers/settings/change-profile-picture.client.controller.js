@@ -36,6 +36,8 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
 
     // Called after the user has successfully uploaded a new picture
     $scope.uploader.onSuccessItem = function (fileItem, response, status, headers) {
+      console.info('onSuccessItem', fileItem, response, status, headers);
+
       // Show success message
       $scope.success = true;
 
@@ -48,6 +50,8 @@ angular.module('users').controller('ChangeProfilePictureController', ['$scope', 
 
     // Called after the user has failed to uploaded a new picture
     $scope.uploader.onErrorItem = function (fileItem, response, status, headers) {
+      console.info('onErrorItem', fileItem, response, status, headers);
+
       // Clear upload buttons
       $scope.cancelUpload();
 

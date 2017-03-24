@@ -1,0 +1,203 @@
+<div ng-controller="AuthenticationController">
+  <!-- <h3 class="col-md-12 text-center">Or sign up using your email</h3> -->
+  <div>
+    <h1 class="text-center">버스회사 회원가입</h1>
+    <br />
+    <br />
+  </div>
+  <!-- <div class="col-xs-offset-2 col-xs-8 col-md-offset-4 col-md-4"> -->
+  <div class="col-md-offset-2 col-md-8">
+    <form name="userForm" ng-submit="signup(userForm.$valid)" class="signin" novalidate autocomplete="off">
+      <fieldset>
+        <div class="form-group text-center">
+          <img ngf-src="fileSelected[0] ? picFiles[0] : defaultProfileImage()" alt="profile image" class="img-thumbnail img-circle user-profile-picture" ngf-drop>
+          <div ng-show="loading[0]">
+            <img ng-src="/modules/core/client/img/loaders/loader.gif" height="50" width="50" alt="이미지 로딩중...">
+          </div>
+          <p>회사 로고</p>
+          <div ng-hide="fileSelected[0]" class="btn btn-default btn-file btn-sm" ngf-select="selectPic(0)"
+            ng-model="picFiles[0]" ngf-accept="'image/*'" ngf-before-model-change="loading[0] = true"
+            ngf-resize="{width: 400}" ngf-resize-if="$width > 400 || $height > 400">사진선택</div>
+          <div ng-show="fileSelected[0]" class="btn btn-default btn-sm" ng-click="cancelPic(0)">취소</div>
+        </div>
+
+        <label>로그인 정보</label>
+        <div class="form-group" show-errors>
+          <input type="text" id="username" name="username" class="form-control" ng-model="credentials.username" placeholder="아이디" lowercase required>
+          <div ng-messages="userForm.username.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <input type="password" id="password" name="password" class="form-control" ng-model="credentials.password" placeholder="비밀번호 (영문/숫자조합 총 10자 이상, 대문자/특수문자 포함)" popover="{{popoverMsg}}" popover-trigger="focus" password-validator required>
+          <div ng-messages="userForm.password.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+            <div ng-repeat="passwordError in passwordErrors">
+              <p class="help-block error-text" ng-show="userForm.password.$error.requirements">{{passwordError}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <input type="password" id="verifyPassword" name="verifyPassword" class="form-control" ng-model="credentials.verifyPassword" placeholder="비밀번호 재입력" password-verify="credentials.password" required>
+          <div ng-messages="userForm.verifyPassword.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+            <p class="help-block error-text" ng-show=userForm.verifyPassword.$error.passwordVerify>비밀번호가 일치하지 않습니다</p>
+          </div>
+        </div>
+        <div class="form-group" ng-show="!userForm.password.$error.required">
+          <label>비밀번호 만족도 (글자수 10개 이상, 영문소문자/영문대문자/숫자/특수문자 반드시 포함)</label>
+          <progressbar value="requirementsProgress" type="{{requirementsColor}}"><span style="color:white; white-space:nowrap;">{{requirementsProgress}}%</span></progressbar>
+        </div>
+        <hr />
+
+        <label>회원 정보</label>
+        <div class="form-group" show-errors>
+          <input type="text" id="affiliation" name="affiliation" class="form-control" ng-model="credentials.affiliation" placeholder="회사 이름" required>
+          <div ng-messages="userForm.affiliation.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <input type="text" id="firstName" name="firstName" class="form-control" ng-model="credentials.firstName" placeholder="담당자 이름" required>
+          <div ng-messages="userForm.firstName.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <input type="email" id="email" name="email" class="form-control" ng-model="credentials.email" placeholder="담당자 이메일 주소 (비밀번호 재설정 등에 사용)" lowercase required>
+          <div ng-messages="userForm.email.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+            <p class="help-block error-text" ng-message="email">이메일 양식이 아닙니다</p>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label for="phone">연락처</label>
+          <p class="input-group">
+            <input name="phone" type="text" ng-model="credentials.phone" id="phone" class="form-control" placeholder="연락 받으실 휴대전화번호" required>
+            <span class="input-group-btn">
+              <button type="button" class="btn btn-danger">인증번호 요청</button>
+            </span>
+          </p>
+          <div ng-messages="userForm.phone.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="servicephone">고객상담 연락처
+            <a tooltip="고객상담 연락처가 왜 필요한가요? 차량이 예약되었을때 승객의 차량 및 배차관련 문의를 받기위한 연락처가 필요합니다. 홈버스에서는 예약 및 결제까지의 절차 및 문의를 담당하며, 예약이후 차량안내 및 배차상담은 버스회사에서 담당하게 됩니다."><i class="glyphicon glyphicon-question-sign"></i></a>
+          </label>
+          <input name="servicephone" type="text" ng-model="credentials.servicephone" id="servicephone" class="form-control" placeholder="고객상담 전화번호" required>
+          <div ng-messages="userForm.servicephone.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <hr />
+
+        <div class="form-group">
+          <label for="licenseImageURL">사업자 등록증 사본 <span class="text-danger">(인증절차에만 사용됩니다)</span></label>
+          <div>
+            <div class="text-center bus-array">
+              <img ngf-src="fileSelected[6] ? picFiles[6] : defaultCameraImage" alt="document image" class="img-thumbnail bus-picture" ngf-drop>
+              <div ng-show="loading[6]">
+                <img ng-src="/modules/core/client/img/loaders/loader.gif" height="50" width="50" alt="이미지 로딩중...">
+              </div>
+              <br />
+              <div ng-hide="fileSelected[6]" class="btn btn-default btn-file btn-sm" ngf-select="selectPic(6)"
+                ng-model="picFiles[6]" ngf-accept="'image/*'" ngf-before-model-change="loading[6] = true"
+                ngf-resize="{width: 400}" ngf-resize-if="$width > 400 || $height > 400">사진선택</div>
+              <div ng-show="fileSelected[6]" class="btn btn-default btn-sm" ng-click="cancelPic(6)">취소</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="registrationImageURL">여객사업자 운송사업등록증 사본 <span class="text-danger">(인증절차에만 사용됩니다)</span></label>
+          <div>
+            <div class="text-center bus-array">
+              <img ngf-src="fileSelected[7] ? picFiles[7] : defaultCameraImage" alt="document image" class="img-thumbnail bus-picture" ngf-drop>
+              <div ng-show="loading[7]">
+                <img ng-src="/modules/core/client/img/loaders/loader.gif" height="50" width="50" alt="이미지 로딩중...">
+              </div>
+              <br />
+              <div ng-hide="fileSelected[7]" class="btn btn-default btn-file btn-sm" ngf-select="selectPic(7)"
+                ng-model="picFiles[7]" ngf-accept="'image/*'" ngf-before-model-change="loading[7] = true"
+                ngf-resize="{width: 400}" ngf-resize-if="$width > 400 || $height > 400">사진선택</div>
+              <div ng-show="fileSelected[7]" class="btn btn-default btn-sm" ng-click="cancelPic(7)">취소</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="busImageURLs">차량 사진 <span class="text-danger">(가로사진이 좋습니다)</span></label>
+          <div>
+            <div class="text-center bus-array1" ng-repeat="i in busImageAlts">
+              <img ngf-src="fileSelected[$index + 1] ? picFiles[$index + 1] : defaultBusImage" alt="busImageAlts[$index]" class="img-thumbnail bus-picture" ngf-drop>
+              <div ng-show="loading[$index + 1]">
+                <img ng-src="/modules/core/client/img/loaders/loader.gif" height="50" width="50" alt="이미지 로딩중...">
+              </div>
+              <br />
+              <div ng-hide="fileSelected[$index + 1]" class="btn btn-default btn-file btn-sm" ngf-select="selectPic($index  + 1)"
+                ng-model="picFiles[$index + 1]" ngf-accept="'image/*'" ngf-before-model-change="loading[$index + 1] = true"
+                ngf-resize="{width: 400}" ngf-resize-if="$width > 400 || $height > 400">사진선택</div>
+              <div ng-show="fileSelected[$index + 1]" class="btn btn-default btn-sm" ng-click="cancelPic($index + 1)">취소<br /></div>
+              <p class="text-danger small">&nbsp;</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label for="busyear25">차량 연식 (25인승)</label>
+          <select name="busyear25" class="form-control" ng-model="credentials.busyear25" ng-options="t for t in busYears1" required>
+            <option value="" disabled selected="">연식을 선택해 주세요</option>
+          </select>
+          <div ng-messages="userForm.busyear25.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="busyear28">차량 연식 (28인승)</label>
+          <select name="busyear28" class="form-control" ng-model="credentials.busyear28" ng-options="t for t in busYears1" required>
+            <option value="" disabled selected="">연식을 선택해 주세요</option>
+          </select>
+          <div ng-messages="userForm.busyear28.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="busyear45">차량 연식 (45인승)</label>
+          <select name="busyear45" class="form-control" ng-model="credentials.busyear45" ng-options="t for t in busYears1" required>
+            <option value="" disabled selected="">연식을 선택해 주세요</option>
+          </select>
+          <div ng-messages="userForm.busyear45.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">필수 입력항목</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">회사 소개</label>
+          <textarea name="message" ng-model="credentials.message" id="message" class="form-control" cols="30" rows="3" placeholder="승객에게 항상 보이는 회사소개 문구입니다"></textarea>
+        </div>
+        <hr />
+
+        <div class="form-group" ng-show="showLoadingProgress">
+          파일들을 업로드중입니다...
+          <div class="progress">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width:{{progress}}%" ng-bind="progress + '%'">
+              <span class="sr-only">{{progress}}% 완료</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-center form-group">
+          <button type="submit" class="btn btn-primary">회원 가입</button>
+          &nbsp; 또는&nbsp;
+          <a ui-sref="authentication.signin" class="show-signup">로그인</a>
+          <br /><small>* 다음 단계로 진행하시면 홈버스 <a>이용약관</a> 및 <a>개인정보 취급방침</a>에 동의하시는 것으로 간주됩니다.</small>
+        </div>
+        <div ng-show="error" class="text-center text-danger">
+          <strong ng-bind="error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>

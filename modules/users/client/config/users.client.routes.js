@@ -36,7 +36,24 @@ angular.module('users').config(['$stateProvider',
       })
       .state('authentication.signup', {
         url: '/signup',
-        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html'
+        templateUrl: 'modules/users/client/views/authentication/signup.client.view.html',
+        params: {
+          signupfor: 'person'
+        }
+      })
+      .state('authentication.signupdriver', {
+        url: '/signupdriver',
+        templateUrl: 'modules/users/client/views/authentication/signupdriver.client.view.html',
+        params: {
+          signupfor: 'driver'
+        }
+      })
+      .state('authentication.signupcomdriver', {
+        url: '/signupcomdriver',
+        templateUrl: 'modules/users/client/views/authentication/signupcomdriver.client.view.html',
+        params: {
+          signupfor: 'comdriver'
+        }
       })
       .state('authentication.signin', {
         url: '/signin?err',

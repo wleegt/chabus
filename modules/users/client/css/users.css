@@ -33,4 +33,22 @@
 .user-profile-picture {
   min-height: 150px;
   max-height: 150px;
+  background-color: #BF8FFF;
+  border: 2px solid #ddd;
+}
+.bus-picture {
+  min-height: 140px;
+  max-height: 140px;
+  background-color: #FABC3D;
+  border: 2px solid #ddd;
+}
+
+.bus-array {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.bus-array1 {
+  display: inline-block;
+  margin-right: 6px;
 }

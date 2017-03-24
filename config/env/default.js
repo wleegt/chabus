@@ -35,6 +35,25 @@ module.exports = {
       limits: {
         fileSize: 1*1024*1024 // Max file size in bytes (1 MB)
       }
-    }
+    },
+    personUpload: {
+      dest: './modules/users/client/img/custom/uploads/persons/', // person image upload destination path
+      limits: {
+        fileSize: 1*1024*1024 // Max file size in bytes (1 MB)
+      }
+    },
+    driverUpload: {
+      dest: './modules/users/client/img/custom/uploads/drivers/', // driver image upload destination path
+      limits: {
+        fileSize: 4*1024*1024 // Max file size in bytes (1 MB)
+      }
+    },
+    comdriverUpload: {
+      dest: './modules/users/client/img/custom/uploads/comdrivers/', // comdriver image upload destination path
+      limits: {
+        fileSize: 4*1024*1024 // Max file size in bytes (1 MB)
+      }
+    },
+
   }
 };

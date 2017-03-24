@@ -97,6 +97,79 @@ var UserSchema = new Schema({
   },
   resetPasswordExpires: {
     type: Date
+  },
+  ///
+  affiliation: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  phone: {
+    type: String,
+    default: '',
+    required: 'Please fill User phone',
+    trim: true
+  },
+  servicephone: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  startposition: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busnumber: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  bustype: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busyear: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busyear25: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busyear28: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busyear45: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  busImageURLs: {
+    type: [String],
+    default: ['./modules/users/client/img/custom/defaultBus.png',
+      './modules/users/client/img/custom/defaultBus.png',
+      './modules/users/client/img/custom/defaultBus.png',
+      './modules/users/client/img/custom/defaultBus.png',
+      './modules/users/client/img/custom/defaultBus.png']
+  },
+  licenseImageURL: {
+    type: String,
+    default: './modules/users/client/img/custom/defaultCamera.png'
+  },
+  registrationImageURL: {
+    type: String,
+    default: './modules/users/client/img/custom/defaultCamera.png'
+  },
+  message: {
+    type: String,
+    default: '',
+    trim: true
   }
 });
 
